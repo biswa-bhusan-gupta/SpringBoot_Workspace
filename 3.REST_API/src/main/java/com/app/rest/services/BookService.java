@@ -27,6 +27,8 @@ public class BookService {
 	}
 	
 	// GET BOOK BY ID
+	// Group grpValidate = group.stream().filter(g -> g.getGroupName().equalsIgnoreCase(grp.getGroupName())
+	//			&& g.getGroupText().equalsIgnoreCase(grp.getGroupText())).findFirst().orElse(null);
 	public Book getBookById(int id) {
 		Book book=null;
 		book=list.stream().filter(e->e.getId()==id).findFirst().get();
@@ -56,6 +58,8 @@ public class BookService {
 	}
 	
 	// UPDATE BOOK
+	// List<FormGroup> fgroup = group.stream().map(b-> new FormGroup(b.getGroupId(),b.getGroupName())).collect(Collectors.toList());
+
 	public void updateBook(Book book,int id) {
 		list=list.stream().map(b->{
 			if(b.getId()==id) {
