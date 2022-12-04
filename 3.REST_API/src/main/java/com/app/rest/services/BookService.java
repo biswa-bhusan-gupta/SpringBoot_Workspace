@@ -27,8 +27,21 @@ public class BookService {
 	}
 	
 	// GET BOOK BY ID
-	// Group grpValidate = group.stream().filter(g -> g.getGroupName().equalsIgnoreCase(grp.getGroupName())
+	// @Override
+	// public Group validateGroup(Group grp) {
+        //
+	//	LOGGER.info("Validate Group : " + grp);
+        //
+	//	List<Group> group = groupDao.findAll();
+	//	LOGGER.info("Groups : " + group);
+        //
+	//	Group grpValidate = group.stream().filter(g -> g.getGroupName().equalsIgnoreCase(grp.getGroupName())
 	//			&& g.getGroupText().equalsIgnoreCase(grp.getGroupText())).findFirst().orElse(null);
+	//	LOGGER.info("Found Group in DB : " + grpValidate);
+        //
+	//	return grpValidate;
+	// }
+
 	public Book getBookById(int id) {
 		Book book=null;
 		book=list.stream().filter(e->e.getId()==id).findFirst().get();
@@ -58,7 +71,12 @@ public class BookService {
 	}
 	
 	// UPDATE BOOK
-	// List<FormGroup> fgroup = group.stream().map(b-> new FormGroup(b.getGroupId(),b.getGroupName())).collect(Collectors.toList());
+	// @Override
+	// public List<FormGroup> getFormGroups() {
+	//	List<Group> group = groupDao.findAll();
+	//	List<FormGroup> fgroup = group.stream().map(b-> new FormGroup(b.getGroupId(),b.getGroupName())).collect(Collectors.toList());
+	//	return fgroup;
+	// }
 
 	public void updateBook(Book book,int id) {
 		list=list.stream().map(b->{
