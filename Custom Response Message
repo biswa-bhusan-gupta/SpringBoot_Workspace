@@ -1,0 +1,111 @@
+// RESPONSE HANDLER
+
+public static ResponseEntity<ResponseMessageWrapper> generateListResponse(String message, int status,
+			List<Group> group) {
+		ResponseMessageWrapper response = new ResponseMessageWrapper(group, message, status);
+		if (status == 200) {
+			return new ResponseEntity<ResponseMessageWrapper>(response, HttpStatus.OK);
+		} else if (status == 201) {
+			return new ResponseEntity<ResponseMessageWrapper>(response, HttpStatus.CREATED);
+		} else if (status == 206) {
+			return new ResponseEntity<ResponseMessageWrapper>(response, HttpStatus.PARTIAL_CONTENT);
+		} else if (status == 404) {
+			return new ResponseEntity<ResponseMessageWrapper>(response, HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<ResponseMessageWrapper>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	public static ResponseEntity<ResponseMessageWrapper> generateResponse(String message, int status,
+			Group group) {
+		ResponseMessageWrapper response = new ResponseMessageWrapper(group, message, status);
+		if (status == 200) {
+			return new ResponseEntity<ResponseMessageWrapper>(response, HttpStatus.OK);
+		} else if (status == 201) {
+			return new ResponseEntity<ResponseMessageWrapper>(response, HttpStatus.CREATED);
+		} else if (status == 206) {
+			return new ResponseEntity<ResponseMessageWrapper>(response, HttpStatus.PARTIAL_CONTENT);
+		} else if (status == 404) {
+			return new ResponseEntity<ResponseMessageWrapper>(response, HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<ResponseMessageWrapper>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+// RESPONSE MESSAGE WRAPPER
+package com.optum.basics.administrationutility.exception;
+
+import java.util.Arrays;
+import java.util.List;
+import org.springframework.http.HttpStatus;
+import com.optum.basics.administrationutility.entity.Group;
+
+import oracle.sql.ARRAY;
+
+public class ResponseMessageWrapper {
+
+	private List<Group> groups;
+	private String message;
+	private int status;
+
+	public ResponseMessageWrapper(List<Group> groups, String message1, int status1) {
+		super();
+		this.groups = groups;
+		this.message = message1;
+		this.status = status1;
+	}
+
+	public ResponseMessageWrapper(Group group, String message2, int status2) {
+		super();
+		groups = Arrays.asList(group);
+		this.message = message2;
+		this.status = status2;
+	}
+
+	public List<Group> getGroup() {
+		return groups;
+	}
+
+	public void setGroup(List<Group> groups) {
+		this.groups = groups;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+}
+
+// REST API CONTROLLER
+	@GetMapping("/Groups")
+	public ResponseEntity<ResponseMessageWrapper> getGroups() {
+		List<Group> groups = this.groupService.getGroups();
+		if (groups.size() > 0) {
+			return ResponseHandler.generateListResponse("User Groups Found", HttpStatus.OK.value(), groups);
+		} else {
+			return ResponseHandler.generateListResponse("No User Groups found", HttpStatus.NOT_FOUND.value(), null);
+		}
+	}
+
+	@GetMapping("/Groups/{id}")
+	public ResponseEntity<ResponseMessageWrapper> getGroup(@PathVariable("id") int grpId) {
+		Group group = this.groupService.getGroupById(grpId);
+		if (group != null) {
+			return ResponseHandler.generateResponse("User Group exists", HttpStatus.OK.value(), group);
+		} else {
+			return ResponseHandler.generateResponse("User Group doesn't exist", HttpStatus.NOT_FOUND.value(), null);
+		}
+	}
+  
