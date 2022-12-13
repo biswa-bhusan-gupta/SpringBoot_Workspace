@@ -10,39 +10,45 @@ return ResponseHandler.generateResponse("No User Groups found", HttpStatus.NOT_F
 
 
 // RESPONSE HANDLER
+import java.util.List;
 
-public static ResponseEntity<ResponseMessageWrapper> generateListResponse(String message, int status,
-			List<Group> group) {
-		ResponseMessageWrapper response = new ResponseMessageWrapper(group, message, status);
-		if (status == 200) {
-			return new ResponseEntity<ResponseMessageWrapper>(response, HttpStatus.OK);
-		} else if (status == 201) {
-			return new ResponseEntity<ResponseMessageWrapper>(response, HttpStatus.CREATED);
-		} else if (status == 206) {
-			return new ResponseEntity<ResponseMessageWrapper>(response, HttpStatus.PARTIAL_CONTENT);
-		} else if (status == 404) {
-			return new ResponseEntity<ResponseMessageWrapper>(response, HttpStatus.NOT_FOUND);
-		} else {
-			return new ResponseEntity<ResponseMessageWrapper>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import com.optum.basics.administrationutility.entity.Group;
+import com.optum.basics.administrationutility.exception.ResponseMessageWrapper;
+
+public class ResponseHandler {
+
+	public static ResponseEntity<ResponseMessageWrapper> generateListResponse(String message, int status, List<Group> groups) {
+		ResponseMessageWrapper response = new ResponseMessageWrapper(groups, message, status);
+        return new ResponseEntity<ResponseMessageWrapper>(response,ResponseHandler.getResponseStatus(status));
 	}
-	
-	public static ResponseEntity<ResponseMessageWrapper> generateResponse(String message, int status,
-			Group group) {
+
+	public static ResponseEntity<ResponseMessageWrapper> generateResponse(String message, int status, Group group) {
 		ResponseMessageWrapper response = new ResponseMessageWrapper(group, message, status);
-		if (status == 200) {
-			return new ResponseEntity<ResponseMessageWrapper>(response, HttpStatus.OK);
-		} else if (status == 201) {
-			return new ResponseEntity<ResponseMessageWrapper>(response, HttpStatus.CREATED);
-		} else if (status == 206) {
-			return new ResponseEntity<ResponseMessageWrapper>(response, HttpStatus.PARTIAL_CONTENT);
-		} else if (status == 404) {
-			return new ResponseEntity<ResponseMessageWrapper>(response, HttpStatus.NOT_FOUND);
-		} else {
-			return new ResponseEntity<ResponseMessageWrapper>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+        return new ResponseEntity<ResponseMessageWrapper>(response,ResponseHandler.getResponseStatus(status));
 	}
-	
+
+	public static HttpStatus getResponseStatus(int status) {
+
+		if (status == 200) {
+			return HttpStatus.OK;
+		} else if (status == 201) {
+			return HttpStatus.CREATED;
+		} else if (status == 206) {
+			return HttpStatus.PARTIAL_CONTENT;
+		} else if (status == 400) {
+			return HttpStatus.BAD_REQUEST;
+		} else if (status == 404) {
+			return HttpStatus.NOT_FOUND;
+		} else {
+			return HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+
+	}
+
+}
+
 // RESPONSE MESSAGE WRAPPER
 package com.optum.basics.administrationutility.exception;
 
