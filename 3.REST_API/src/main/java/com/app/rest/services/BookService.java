@@ -27,6 +27,7 @@ public class BookService {
 	}
 	
 	// GET BOOK BY ID
+	
 	// @Override
 	// public Group validateGroup(Group grp) {
         //
@@ -68,16 +69,9 @@ public class BookService {
 	// DELETE BOOK
 	public void deleteBook(int id) {
 		list=list.stream().filter(book->book.getId()!=id).collect(Collectors.toList());
-	}
+	}        
 	
 	// UPDATE BOOK
-	// @Override
-	// public List<FormGroup> getFormGroups() {
-	//	List<Group> group = groupDao.findAll();
-	//	List<FormGroup> fgroup = group.stream().map(b-> new FormGroup(b.getGroupId(),b.getGroupName())).collect(Collectors.toList());
-	//	return fgroup;
-	// }
-
 	public void updateBook(Book book,int id) {
 		list=list.stream().map(b->{
 			if(b.getId()==id) {
