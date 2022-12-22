@@ -1,0 +1,56 @@
+	Service Class IMPL -->
+  
+  Type : 1
+	@Override
+	public List<FormGroup> getFormGroups() {
+		List<Group> group = groupDao.findAll();
+		List<FormGroup> fgroup = group.stream().map(b-> new FormGroup(b.getGroupId(),b.getGroupName())).collect(Collectors.toList());
+		return fgroup;
+ }
+	
+	Type : 2
+	@Override
+	public List<AvailableUsers> getAvailableUsers() {
+		List<Object[]> objects = this.groupUserDao.findAvailableUsers();
+		List<AvailableUsers> availableUsers = new ArrayList<AvailableUsers>();
+		availableUsers = objects.stream()
+				.map(object -> new AvailableUsers(object[0].toString(), object[1].toString(), object[2].toString()))
+				.collect(Collectors.toList());
+
+//		if (objects.size() > 0) {
+//			for (Object[] object : objects) {
+//				AvailableUsers availUser = new AvailableUsers();
+//				availUser.setIntrlStfLstNm(object[0].toString());
+//				availUser.setIntrlStfFstNm(object[1].toString());
+//				availUser.setUserId(object[2].toString());
+//				availableUsers.add(availUser);
+//			}
+//		}
+
+		return availableUsers;
+ }
+ 
+Pagination -->
+ 
+@Override
+public List<AvailableUsers> getAvailUsers(int pageNumber, int pageSize) {
+
+		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+		Page<Object[]> pagePost = this.groupUserDao.findAvailableUsers(pageable);
+		List<Object[]> objects = pagePost.getContent();
+    
+    List<AvailableUsers> availableUsers = new ArrayList<AvailableUsers>();
+		availableUsers = objects.stream()
+				.map(object -> new AvailableUsers(object[0].toString(), object[1].toString(), object[2].toString()))
+				.collect(Collectors.toList());
+    
+    return availableUsers;
+}
+
+DAO Class :
+@Query(value=Queries.SQL_GET_AVAILABLE_USERS, nativeQuery = true)
+List<Object[]> findAvailableUsers(Pageable pageable);
+
+public String SQL_GET_AVAILABLE_USERS = "SELECT INTRL_STF_LST_NM,INTRL_STF_FST_NM,USER_ID FROM BODS.INTERNAL_STAFF FETCH FIRST 10 ROWS ONLY";
+
+ 
