@@ -1,11 +1,13 @@
 
 Service Class IMPL -->
   
+  import static org.apache.commons.collections4.CollectionUtils.emptyIfNull;
+  
   Type : 1
 	@Override
 	public List<FormGroup> getFormGroups() {
 		List<Group> group = groupDao.findAll();
-		List<FormGroup> fgroup = group.stream().map(b-> new FormGroup(b.getGroupId(),b.getGroupName())).collect(Collectors.toList());
+		List<FormGroup> fgroup = emptyIfNull(group).stream().map(b-> new FormGroup(b.getGroupId(),b.getGroupName())).collect(Collectors.toList());
 		return fgroup;
  }
 	
@@ -14,7 +16,7 @@ Service Class IMPL -->
 	public List<AvailableUsers> getAvailableUsers() {
 		List<Object[]> objects = this.groupUserDao.findAvailableUsers();
 		List<AvailableUsers> availableUsers = new ArrayList<AvailableUsers>();
-		availableUsers = objects.stream()
+		availableUsers = emptyIfNull(objects).stream()
 				.map(object -> new AvailableUsers(object[0].toString(), object[1].toString(), object[2].toString()))
 				.collect(Collectors.toList());
 
@@ -37,11 +39,11 @@ Pagination -->
 public List<AvailableUsers> getAvailUsers(int pageNumber, int pageSize) {
 
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
-    Page<Object[]> pagePost = this.groupUserDao.findAvailableUsers(pageable);
-    List<Object[]> objects = pagePost.getContent();
+    Page<Object[]> page = this.groupUserDao.findAvailableUsers(pageable);
+    List<Object[]> objects = page.getContent();
     
     List<AvailableUsers> availableUsers = new ArrayList<AvailableUsers>();
-    availableUsers = objects.stream()
+    availableUsers = emptyIfNull(objects).stream()
                      .map(object -> new AvailableUsers(object[0].toString(), object[1].toString(), object[2].toString()))
                      .collect(Collectors.toList());
     
