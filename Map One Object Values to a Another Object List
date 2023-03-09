@@ -1,6 +1,8 @@
 
 Service Class IMPL -->
   
+  private static final Logger LOGGER = LoggerFactory.getLogger(GroupUserServiceImpl.class);
+
   import static org.apache.commons.collections4.CollectionUtils.emptyIfNull;
   
   Type : 1
